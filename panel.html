@@ -12,6 +12,12 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <!-- DataTables CSS -->
+    <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
     <!-- MetisMenu CSS -->
     <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -27,6 +33,7 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.standalone.css">
+    <link rel="stylesheet" href="css/table-scrollable.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -81,227 +88,358 @@
       <div class="barside">
         <img class="navbar-brand" id="logo" src="logo.png"></img>
         <ul style="margin-top:50px; list-style:none; font-size:50px; color:white; padding:28px;">
-          <li>
-            <a style="color:white; text-decoration: none;" href="#" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              <span style="font-size:50px;" class="material-icons no-padding">playlist_add</span>
-              <p style="white; font-size:11px; width:200px; margin-left:-14px; margin-top:-15px;">Formar Pedido</p>
-            </a>
-          </li>
-          <li>
-            <a style="color:white; text-decoration: none;" href="tickets.html">
-              <span style="font-size:35px;" class="material-icons no-padding">receipt</span>
-              <p style="white; font-size:11px; width:200px; margin-left:-14px; margin-top:-15px;">Revisar tickets</p>
-            </a>
-          </li>
+
         </ul>
       </div>
       <div id="page-wrapper">
         <div class="row">
-          <ul class="nav nav-pills nav-justified" style="padding:30px;">
-            <li class="active"><a onclick="pedidosRecibidos()" id="pills" href="#"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Pedidos Recibidos</a></li>
-            <li class="active"><a onclick="pedidosEnProceso()" id="pills" href="#"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Pedidos en Proceso</a></li>
-            <li class="active"><a onclick="historialPedidos()" id="pills" href="#"><span class="glyphicon glyphicon-folder-open" ></span> Historial de pedidos</a></li>
-          </ul>
-          <!--<div class="nav nav-pills nav-justified" data-toggle="buttons" style="padding:30px;">
-            <label id="pills" onclick="pedidosRecibidos()" class="btn btn-primary active">
-              <input type="radio" name="options" autocomplete="off" checked><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Pedidos Recibidos
-            </label>
-            <label id="pills" onclick="pedidosEnProceso()" class="btn btn-primary">
-              <input type="radio" name="options" autocomplete="off"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Pedidos en Proceso
-            </label>
-            <label id="pills" onclick="historialPedidos()" class="btn btn-primary">
-              <input type="radio" name="options" autocomplete="off"><span class="glyphicon glyphicon-folder-open" ></span> Historial de pedidos
-            </label>
-          </div>-->
-          <div id="pedidosRecibidos" class="col-lg-12">
-            <div class="form-inline">
-              <div class="form-group">
-                <span class="glyphicon glyphicon-filter"></span></span>Filtros</span>
-              </div>
-              <div class="form-group">
-                <select class="form-control" style="min-width:150px;">
-                <option value="">Ruta</option>
-                </select>
-              </div>
-              <select class="selectpicker" multiple>
-                <option>Lunes</option>
-                <option>Martes</option>
-                <option>Miercoles</option>
-                <option>Jueves</option>
-                <option>Viernes</option>
-                <option>Sabado</option>
-                <option>Domingo</option>
-              </select>
-              <div class="form-group">
-                <select class="form-control" style="min-width:150px;">
-                  <option value="">Detallado</option>
-                </select>
-              </div>
-              <!--<div class="input-group" style="float:right;">
-                <input type="text" class="form-control" placeholder="Buscar por...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                </span>
-              </div>--><!-- /input-group -->
-              <div style="float:right;" class="form-group has-feedback">
-                <input style="font-style: italic;" id="buscarPedido"  type="search" class="form-control" placeholder="Buscar" />
-                <i style="color: #4388E5;" class="form-control-feedback glyphicon glyphicon-search rota-horizontal"></i>
-              </div>
-            </div>
-            <div id="loaderPedidos" class="loader"></div>
-            <div class="table-responsive">
-              <table id="tablaPedidos" class="table-hover hidden table table-condensed table-bordered table-striped" style="margin-top:15px;">
-                <thead>
-                  <tr>
-                    <th>Clave</th>
-                    <th>Fecha de captura</th>
-                    <th>Tienda</th>
-                    <th>Ruta</th>
-                    <th>Detalles</th>
-                    <th>Estado</th>
-                    <th>Eliminar</th>
-                  </tr>
-                </thead>
-                <tbody id="tbodyTablaPedidos">
-
-                </tbody>
-              </table>
-
-              <!--<div class="contenedor-tabla">
-                <div class="contenedor-fila">
-                  <div class="contenedor-columna">Columna 1</div>
-                  <div class="contenedor-columna">Columna 2</div>
-                  <div class="contenedor-columna">Columna 3</div>
-                </div>
-              </div>-->
-
-              <!--<div class="Table">
-                <div class="Title">
-                  <p>Esta es la tabla</p>
-                </div>
-                <div class="Heading">
-                  <div class="Cell">
-                    <p>Primer Nombre</p>
-                  </div>
-                  <div class="Cell">
-                    <p>Segundo Nombre</p>
-                  </div>
-                  <div class="Cell">
-                    <p>Edad</p>
-                  </div>
-                </div>
-                <div class="Row">
-                  <div class="Cell">
-                    <p>Juan</p>
-                  </div>
-                  <div class="Cell">
-                    <p>Escutia</p>
-                  </div>
-                  <div class="Cell">
-                    <p>28</p>
-                  </div>
-                </div>
-                <div class="Row">
-                  <div class="Cell">
-                    <p>Pedro</p>
-                  </div>
-                  <div class="Cell">
-                    <p>Infante</p>
-                  </div>
-                  <div class="Cell">
-                    <p>27</p>
-                  </div>
-                </div>
-              </div>-->
-            </div><!--/.table-responsive-->
-            <div class="collapse" id="collapseExample">
-              <div class="well">
-                <div class="table-responsive">
-                  <table id="tablaPedidoPadre" class="table table-condensed table-bordered" style="padding:0px 0px 0px; ">
-                    <thead>
-                      <th>Clave</th>
-                      <th>Fecha de captura</th>
-                      <th>Tienda</th>
-                      <th>Ruta</th>
-                      <th>Detalles</th>
-                      <th>Estado</th>
-                    </thead>
-                    <tbody id="tbodyTablaPedidoPadre" style="border: 2px solid grey; border-style: dashed; height:200px; width:100%;"  class="tabla-drag">
-                      <h4>Arrastra los pedidos dentro de las líneas punteadas para agruparlos</h4>
-                      <tr id="vacio" style="padding:0px 0px 0px;" class="no-pading">
-                        <td scope="row" style="border:none;"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="no-padding"></td>
-                        <td class="no-padding"> </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <button class="btn btn-success" type="button" onclick="generarPedidoPadre()">Generar pedido</button>
-                  <button class="btn btn-danger" type="button" onclick="cancelarPedidoPadre()">Cancelar</button>
-                </div>
-              </div>
-            </div>
-          </div><!-- /.col-lg-12 -->
-          <div id="pedidosEnProceso" class="col-lg-12">
-            <div id="loaderPedidosEnProceso" class="loader"></div>
-            <div class="table-responsive">
-              <h4 class="text-center" id="pPedidosProceso"></h4>
-              <table id="tablaPedidosEnProceso" class="table-hover hidden table table-condensed table-striped table-bordered" style="margin-top:15px;">
-                <thead>
-                  <th>Clave</th>
-                  <th>Fecha de captura</th>
-                  <th>Fecha ruta</th>
-                  <th>Modificar fecha ruta</th>
-                  <th>Ruta</th>
-                  <th>Modificar ruta</th>
-                  <th>Estado</th>
-                  <th>Detalles</th>
-                </thead>
-                <tbody id="tbodyTablaPedidos">
-
-                </tbody>
-              </table>
-            </div><!--/.table-responsive-->
+          <div class="col-md-12">
+            <h1 class="page-header">Fórmulas</h1>
           </div>
-          <div id="historialPedidos" class="col-lg-12">
-            <div class="table-responsive">
-              <table id="tablaHistorialPedidos" class="table-hover table table-condensed table-striped table-bordered" style="margin-top:15px;">
-                <thead>
-                  <th>Clave</th>
-                  <th>Fecha de captura</th>
-                  <th>Tienda</th>
-                  <th>Ruta</th>
-                  <th>Imprimir</th>
-                  <th>Estado</th>
-                </thead>
-                <tbody id="tbodyTablaPedidos">
-
-                </tbody>
-              </table>
-            </div><!--/.table-responsive-->
-          </div>
-          <div id="modalConfirmarEliminarPedido" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title">Confirmar eliminación</h4>
-                </div>
-                <div class="modal-body">
-                  <p>¿Realmente desea eliminar este pedido?</p>
-                </div>
-                <div class="modal-footer">
-                  <button id="btnCancelar" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  <button id="btnConfirmar" type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
-                </div>
-              </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-          </div><!-- /.modal -->
         </div><!-- /.row -->
+        <div class="row">
+          <div class="col-md-2 col-md-offset-10">
+            <button type="button" class="btn btn-success btn-lg" onclick="abrirModalAgregrar()">Nueva fórmula <i class="fa fa-flask" aria-hidden="true"></i></button>
+          </div>
+        </div><br>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3>Jamones</h3>
+              </div>
+              <div class="panel-body">
+                <table width="100%" id="tabla-jamones" class="table table-striped table-bordered table-hover table-condensed">
+                  <thead>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                <h3>Salchichas</h3>
+              </div>
+              <div class="panel-body">
+                <table width="100%" id="tabla-salchichas" class="table table-striped table-bordered table-hover table-condensed">
+                  <thead>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-danger">
+              <div class="panel-heading">
+                <h3>Chorizos</h3>
+              </div>
+              <div class="panel-body">
+                <table width="100%" id="tabla-chorizos" class="table table-striped table-bordered table-hover table-condensed">
+                  <thead>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-warning">
+              <div class="panel-heading">
+                <h3>Delicatessen</h3>
+              </div>
+              <div class="panel-body">
+                <table width="100%" id="tabla-delicatessen" class="table table-striped table-bordered table-hover table-condensed">
+                  <thead>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3>Otros</h3>
+              </div>
+              <div class="panel-body">
+                <table width="100%" id="tabla-otros" class="table table-striped table-bordered table-hover table-condensed">
+                  <thead>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div><!-- /#page-wrapper -->
     </div><!-- /#wrapper -->
+    <div id="modalAgregarFormula" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Nueva fórmula</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="producto">Clave de producto:</label>
+                  <input id="producto" name="producto" class="form-control input-sm" placeholder="Clave de producto">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="producto">Nombre:</label>
+                  <input id="nombre" name="nombre" class="form-control input-sm" placeholder="Nombre">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="categoria">Categoría:</label>
+                  <select id="categoria" name="categoria" class="form-control input-sm"></select>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="subProductos">Sub producto:</label>
+                  <select class="form-control input-sm" name="subProductos" id="subProductos">
+
+                  </select>
+                   <span id="helpBlockSubProductos" class="hidden help-block">Campo obligatorio</span>
+                </div>
+              </div>
+              <div class="col-md-6 hide">
+                <div class="form-group">
+                  <label for="nombreSubProducto">Nombre:</label>
+                  <input id="nombreSubproducto" name="nombreSubproducto" class="form-control input-sm" placeholder="Nombre">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="cantidad">Cantidad:</label>
+                  <input type="number" min="0" name="cantidad" id="cantidad" class="form-control input-sm" placeholder="Cantidad">
+                  <span id="helpBlockCantidad" class="hidden help-block">Campo obligatorio</span>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="tipoFormulacion">Tipo de formulación:</label>
+                  <select type="" name="tipoFormulacion" id="tipoFormulacion" class="form-control input-sm"></select>
+                  <span id="helpBlockTipoFormulacion" class="hidden help-block">Campo obligatorio</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2 col-md-offset-10">
+                <button class="btn btn-primary btn-sm btn-block" onclick="agregarSubProducto()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Añadir</button>
+              </div>
+            </div>
+            <label for="">Sub productos:</label>
+            <!-- <div class="table-responsive" style="max-height: 200px; overflow: true;"> -->
+              <table id="tabla-subProductos" class="table table-striped table-bordered table-hover table-condensed">
+                <thead>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>Tipo de formulación</th>
+                  <th>Valor constante</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            <!-- </div> -->
+            <div class="form-group">
+              <a href="#collapseNuevaMateria" data-toggle="collapse" aria-expanded="false" aria-controls="collapseNuevaMateria"><i class="glyphicon glyphicon-plus" aria-hidden="true"></i> Agregar una nueva materia prima</a>
+            </div>
+            <div class="collapse" id="collapseNuevaMateria">
+              <div class="well">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="idSubProducto">Id:</label>
+                      <input type="text" name="idSubProducto" id="idSubProducto" class="form-control input-sm" placeholder="Id">
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="nombreSubProducto">Nombre:</label>
+                      <input type="text" name="nombreSubProducto" id="nombreSubProducto" class="form-control input-sm" placeholder="Nombre">
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success btn-sm" onclick="guardarSubProducto()">Guardar</button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success" onclick="guardarFormula()">Guardar</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="modalEditarFormula" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Editar fórmula</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="productoEditar">Clave de producto:</label>
+                  <input type="text" readonly name="productoEditar" id="productoEditar" class="form-control input-sm">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nombreEditar">Nombre:</label>
+                  <input type="text" readonly name="nombreEditar" id="nombreEditar" class="form-control input-sm">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="categoriaEditar">Categoría:</label>
+                  <input type="text" readonly name="categoriaEditar" id="categoriaEditar" class="form-control input-sm">
+                </div>
+              </div>
+            </div>
+            <label for="">Componentes:</label>
+            <div class="table-responsive" style="max-height: 200px; overflow: true;">
+              <table id="tabla-subProductos-editar" class="table table-striped table-condensed table-hover table-bordered">
+                <thead>
+                  <th >Id</th>
+                  <th >Nombre de subproducto</th>
+                  <th >Tipo de formulación</th>
+                  <th >Valor constante</th>
+                  <th></th>
+                  <th></th>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <button id="btnGuardarCambios"type="button" class="btn btn-warning">Guardar cambios</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="modalConfirmarGuardar" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">¿Desea guardar?</h4>
+          </div>
+          <div class="modal-body">
+            <p>¿Está seguro que desea guardar este subproducto?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button id="btnGuardar" type="button" class="btn btn-primary">Sí</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="modalConfirmarEliminar" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Confirmar eliminación</h4>
+          </div>
+          <div class="modal-body">
+            <p>¿Está seguro que desea eliminar la fórmula de este producto? Está acción no podrá deshacerse.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button id="btnEliminar" type="button" class="btn btn-primary">Sí</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="modalEditarSubProducto" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Editar subproducto</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="nombreSPEditar">Nombre:</label>
+                  <input type="text" name="nombreSPEditar" id="nombreSPEditar" class="form-control input-sm">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="tipoFormulacionSPEditar">Tipo formulación:</label>
+                  <select type="text" name="tipoFormulacionSPEditar" id="tipoFormulacionSPEditar" class="form-control input-sm"></select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="valorConstanteSPEditar">Valor constante:</label>
+                  <input type="number" name="valorConstanteSPEditar" id="valorConstanteSPEditar" class="form-control input-sm">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <!-- jQuery -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script> -->
     <script src="js/jquery-3.2.1.min.js"></script>
@@ -320,16 +458,22 @@
     <script src="dist/js/bootstrap-select.js"></script>
     <script src="vendor/metisMenu/metisMenu.min.js"></script>
     <!-- Morris Charts JavaScript -->
-    <script src="vendor/raphael/raphael.min.js"></script>
+    <!-- <script src="vendor/raphael/raphael.min.js"></script>
     <script src="vendor/morrisjs/morris.min.js"></script>
-    <script src="data/morris-data.js"></script>
+    <script src="data/morris-data.js"></script> -->
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
+    <!-- DataTables JavaScript -->
+    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
+
     <script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
     <script src="js/bootstrap-tooltip.js"></script>
     <script src="js/jquery.toaster.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <script src="js/mindmup-editabletable.js"></script>
     <!--<script src="js/jspdf.debug.js"></script>-->
     <script>
       // Initialize Firebase
@@ -344,8 +488,6 @@
       firebase.initializeApp(config);
     </script>
     <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/$VERSION/dragula.min.js'></script>-->
-    <script src="js/dragula.min.js"></script>
-    <script src="js/busqueda.js"></script>
     <script src="js/moment-with-locales.js"></script>
     <script src="js/panel.js"></script>
   </body>
