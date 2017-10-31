@@ -247,8 +247,8 @@ function mostrarProductos(categoria) {
       filas += `<tr>
                   <td>${producto}</td>
                   <td>${productos[producto].nombre}</td>
-                  <td class="text-center"><button class="btn btn-warning btn-sm" onclick="abrirModalEditar('${producto}')"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
-                  <td class="text-center"><button class="btn btn-danger btn-sm" onclick="abrirModalEliminar('${producto}')"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+                  <td class="text-center"><button type="button" class="btn btn-warning btn-sm" onclick="abrirModalEditar('${producto}')"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                  <td class="text-center"><button type="button" class="btn btn-danger btn-sm" onclick="abrirModalEliminar('${producto}')"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>`;
     }
     tabla.rows.add($(filas)).columns.adjust().draw();
