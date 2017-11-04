@@ -125,11 +125,12 @@ function agregarSubProducto() {
   let tipoFormulacion = $('#tipoFormulacion').val();
 
   if(id != null && id != undefined &&  valorConstante.length > 0 && tipoFormulacion != null && tipoFormulacion != undefined) {
-    let fila = `<tr>
+    let fila = `<tr id="fila-${id}">
                   <td>${id}</td>
                   <td>${nombre}</td>
                   <td>${tipoFormulacion}</td>
                   <td>${valorConstante}</td>
+                  <td class="text-center"><button onclick="removerSubProducto('fila-${id}')" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
                 </tr>`;
 
     $('#tabla-subProductos tbody').append(fila);
@@ -172,6 +173,10 @@ function agregarSubProducto() {
       $('#helpBlockTipoFormulacion').addClass('hidden');
     }
   }
+}
+
+function removerSubProducto(idFila) {
+  $(`#${idFila}`).remove();
 }
 
 function guardarSubProducto() {
