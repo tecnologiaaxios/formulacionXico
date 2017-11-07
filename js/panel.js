@@ -284,6 +284,14 @@ function agregarSustituto() {
     $('#tipoFormulacionSustituto').val('');
   }
   else {
+    if(claveSubProducto == undefined || claveSubProducto == null) {
+      $('#claveSubProductoSustituir').parent().addClass('has-error');
+      $('#helpBlockClaveSubProductoSustituir').removeClass('hidden');
+    }
+    else {
+      $('#claveSubProductoSustituir').parent().removeClass('has-error');
+      $('#helpBlockClaveSubProductoSustituir').addClass('hidden');
+    }
     if(claveSustituto == undefined || claveSustituto == null) {
       $('#sustitutos').parent().addClass('has-error');
       $('#helpBlockSustitutos').removeClass('hidden');
@@ -362,13 +370,20 @@ function guardarFormula() {
         ruta.set(listaSubProductos[i]);
       }
 
-      for(let i in listaSustitutos) {
-        let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${claveSustituto[i]}/${listaSustitutos[i]}`);
-        rutaSustitutos.set(listaSustitutos[i]);
-      }
-
       listaSubProductos = [];
       clavesSubProductos = [];
+
+      let seUsaronSustitutos = $('#cbAgregarSustitutos').bootstrapSwitch('state');
+      if(seUsaronSustitutos) {
+        for(let i in listaSustitutos) {
+          let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${claveSustituto[i]}/${listaSustitutos[i]}`);
+          rutaSustitutos.set(listaSustitutos[i]);
+        }
+
+        listaSustitutos = [];
+        listaClavesSubProductos = [];
+        clavesSustitutos = [];
+      }
 
       $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'La fórmula se guardó correctamente'});
       $('#producto').val('');
@@ -628,6 +643,15 @@ $('#cbAgregarSustitutos').on('switchChange.bootstrapSwitch', function(event, sta
 
   }else {
     $('#collapseSustitutos').collapse('hide');
+
+    $('#claveSubProductoSustituir').parent().removeClass('has-error');
+    $('#helpBlockClaveSubProductoSustituir').addClass('hidden');
+    $('#sustitutos').parent().removeClass('has-error');
+    $('#helpBlockSustitutos').addClass('hidden');
+    $('#cantidadSustituto').parent().removeClass('has-error');
+    $('#helpBlockCantidadSustituto').addClass('hidden');
+    $('#tipoFormulacionSustituto').parent().removeClass('has-error');
+    $('#helpBlockTipoFormulacionSustituto').addClass('hidden');
   }
 });
 
