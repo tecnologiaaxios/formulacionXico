@@ -241,7 +241,7 @@ $('#tipoFormulacionSustituto').change(function() {
   }
 });
 
-function removerSubProducto(idFila, clave) {
+function removerSustituto(idFila, clave) {
   $(`#${idFila}`).remove();
 
   let index = clavesSustitutos.indexOf(clave);
@@ -258,13 +258,13 @@ function agregarSustituto() {
   let tipoFormulacionSustituto = $('#tipoFormulacionSustituto').val();
 
   if(claveSubProducto != null && claveSubProducto != undefined && claveSustituto != null && claveSustituto != undefined &&  valorConstanteSustituto.length > 0 && tipoFormulacionSustituto != null && tipoFormulacionSustituto != undefined) {
-    let fila = `<tr id="sustituto-${claveSustituto}">
+    let fila = `<tr id="sustituto-de-${claveSubProducto}">
                   <td>${claveSubProducto}</td>
                   <td>${claveSustituto}</td>
                   <td>${nombreSustituto}</td>
                   <td>${tipoFormulacionSustituto}</td>
                   <td>${valorConstanteSustituto}</td>
-                  <td class="text-center"><button onclick="removerSustituto('sustituto-${claveSustituto}')" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
+                  <td class="text-center"><button onclick="removerSustituto('sustituto-de-${claveSubProducto}')" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td>
                 </tr>`;
 
     $('#tabla-sustitutos tbody').append(fila);
@@ -276,7 +276,7 @@ function agregarSustituto() {
     }
 
     listaSustitutos.push(datos);
-    clavesSustitutos.push(id);
+    clavesSustitutos.push(claveSustituto);
     listaClavesSubProductos.push(claveSubProducto);
 
     $('#cantidadSustituto').val('');
@@ -325,6 +325,9 @@ function removerSubProducto(idFila, id) {
   let index = clavesSubProductos.indexOf(id);
   clavesSubProductos.splice(index, 1);
   listaSubProductos.splice(index, 1);
+
+  $(`#claveSubProductoSustituir option[value="${id}"]`).remove();
+  $(`#sustituto-de-${id}`).remove();
 }
 
 function guardarSubProducto() {
@@ -510,7 +513,7 @@ function guardarEditado(idSubProducto, idCampoNombre, idCampoTipoFormulacion, id
   let campoTipoFormulacion = $(`#${idCampoTipoFormulacion}`).val()
   let campoValorConstante = $(`#${idCampoValorConstante}`).val()
   $('#modalConfirmarGuardar').modal('show');
-  $('#btnGuardar').attr('onclick', `guardarSubProductoEditado('${idSubProducto}', '${campoNombre}', '${campoTipoFormulacion}', '${campoValorConstante}')`);
+  $('#btnGuardar').attr('onclick', `guardarSubProductoEditado('${idSubProducto}', '${campoNombre}', '${campoTipoFormulacion}', '${campoValorConstante}', '${idCampoNombre}', '${idCampoTipoFormulacion}', '${idCampoValorConstante}')`);
   //console.log(idSubProducto);
 
 }
@@ -522,7 +525,7 @@ function abrirModalEliminar(claveProducto) {
   $('#btnEliminar').attr('onclick', `eliminarFormula('${claveProducto}')`);
 }
 
-function guardarSubProductoEditado(idSubProducto, campoNombre, campoTipoFormulacion, campoValorConstante){
+function guardarSubProductoEditado(idSubProducto, campoNombre, campoTipoFormulacion, campoValorConstante, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante) {
   let producto = $('#productoEditar').val();
   let rutaFormula = db.ref(`formulaciones/${producto}/subProductos/${idSubProducto}`);
   //console.log(rutaFormula);
@@ -531,7 +534,12 @@ function guardarSubProductoEditado(idSubProducto, campoNombre, campoTipoFormulac
     tipoFormulacion: campoTipoFormulacion,
     valorConstante: campoValorConstante
   }
-  rutaFormula.set(datos);
+  rutaFormula.update(datos);
+
+  $(`#${idCampoNombre}`).attr('readonly', true);
+  $(`#${idCampoTipoFormulacion}`).attr('readonly', true);
+  $(`#${idCampoValorConstante}`).attr('readonly', true);
+
   $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'La fórmula se guardó correctamente'});
   $('#modalConfirmarGuardar').modal('hide');
 }
