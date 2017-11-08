@@ -282,6 +282,7 @@ function agregarSustituto() {
     $('#cantidadSustituto').val('');
     $('#sustitutos').val('');
     $('#tipoFormulacionSustituto').val('');
+    $('#claveSubProductoSustituir').val('');
   }
   else {
     if(claveSubProducto == undefined || claveSubProducto == null) {
@@ -379,7 +380,7 @@ function guardarFormula() {
       let seUsaronSustitutos = $('#cbAgregarSustitutos').bootstrapSwitch('state');
       if(seUsaronSustitutos) {
         for(let i in listaSustitutos) {
-          let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${claveSustituto[i]}/${listaSustitutos[i]}`);
+          let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${clavesSustitutos[i]}`);
           rutaSustitutos.set(listaSustitutos[i]);
         }
 
@@ -399,6 +400,13 @@ function guardarFormula() {
       $('#cantidad').attr('readonly', true);
       $('#tipoFormulacion').attr('readonly', true);
       $('#añadirSubProducto').attr('disabled', true);
+      $('#claveSubProductoSustituir').val('');
+      $('#tabla-subProductos tbody').html('');
+      $('#tabla-sustitutos tbody').html('');
+      $('#collapseSustitutos').collapse('hide');
+      $('#cbAgregarSustitutos').bootstrapSwitch('state', false);
+
+
     }
   });
 }
