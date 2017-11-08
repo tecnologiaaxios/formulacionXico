@@ -515,10 +515,7 @@ function guardarEditado(idSubProducto, idCampoNombre, idCampoTipoFormulacion, id
   $('#modalConfirmarGuardar').modal('show');
   $('#btnGuardar').attr('onclick', `guardarSubProductoEditado('${idSubProducto}', '${campoNombre}', '${campoTipoFormulacion}', '${campoValorConstante}', '${idCampoNombre}', '${idCampoTipoFormulacion}', '${idCampoValorConstante}')`);
   //console.log(idSubProducto);
-
 }
-
-
 
 function abrirModalEliminar(claveProducto) {
   $('#modalConfirmarEliminar').modal('show');
