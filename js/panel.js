@@ -403,10 +403,7 @@ function guardarFormula() {
       $('#claveSubProductoSustituir').val('');
       $('#tabla-subProductos tbody').html('');
       $('#tabla-sustitutos tbody').html('');
-      $('#collapseSustitutos').collapse('hide');
       $('#cbAgregarSustitutos').bootstrapSwitch('state', false);
-
-
     }
   });
 }
