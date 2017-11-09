@@ -469,7 +469,59 @@ function abrirModalAgregrar() {
   llenarSelectTiposFormulaciones();
 }
 
+function mostrarSustitutos(claveProducto) {
+  let tabla = $(`#tabla-sustitutos-editar`).DataTable({
+    destroy: true,
+    "lengthChange": false,
+    "scrollY": "200px",
+    "scrollCollapse": true,
+    "language": {
+      "url": "//cdn.datatables.net/plug-ins/a5734b29083/i18n/Spanish.json"
+    },
+    "ordering": false
+  });
+
+  let formulaRef = db.ref(`formulaciones/${claveProducto}`);
+  formulaRef.on('value', function(snapshot) {
+    let formula = snapshot.val();
+
+    let subProductos = formula.subProductos;
+    let filas = "";
+    tabla.clear();
+
+    for(let subProducto in subProductos) {
+      let sustitutos = subProductos[subProducto].sustitutos;
+      if(sustitutos != undefined) {
+        for(let sustituto in sustitutos) {
+
+          filas += `<tr id="tr-${sustituto}">
+                      <td>${sustituto}</td>
+                      <td><input id="nombre-${sustituto}" readonly class="form-control input-sm" value="${sustitutos[sustituto].nombre}"></td>
+                      <td><input id="tipoFormulacion-${sustituto}" readonly class="form-control input-sm" value="${sustitutos[sustituto].tipoFormulacion}"></td>
+                      <td><input id="valorConstante-${sustituto}" readonly class="form-control input-sm" value="${sustitutos[sustituto].valorConstante}"></td>
+                      <td class=text-center><button class="btn btn-warning btn-sm" onclick="habilitarEditado('nombre-${sustituto}', 'tipoFormulacion-${sustituto}', 'valorConstante-${sustituto}')"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                      <td class=text-center><button class="btn btn-success btn-sm" onclick="guardarEditadoSustituto('${subProducto}', '${sustituto}', 'nombre-${sustituto}', 'tipoFormulacion-${sustituto}', 'valorConstante-${sustituto}')"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
+                    </tr>`;
+        }
+      }
+    }
+
+    //$('#tabla-subProductos-editar tbody').html(filas);
+    tabla.rows.add($(filas)).columns.adjust().draw();
+  });
+}
+
 function abrirModalEditar(claveProducto) {
+  let tabla = $(`#tabla-subProductos-editar`).DataTable({
+    destroy: true,
+    "lengthChange": false,
+    "scrollY": "200px",
+    "scrollCollapse": true,
+    "language": {
+      "url": "//cdn.datatables.net/plug-ins/a5734b29083/i18n/Spanish.json"
+    },
+    "ordering": false
+  });
   $('#modalEditarFormula').modal('show');
   $(`#nombreEditar`).attr('readonly', false);
   $(`#categoriaEditar`).attr('readonly', false);
@@ -483,6 +535,7 @@ function abrirModalEditar(claveProducto) {
 
     let subProductos = formula.subProductos;
     let filas = "";
+    tabla.clear();
 
     for(let subProducto in subProductos) {
       filas += `<tr id="tr-${subProducto}">
@@ -495,17 +548,37 @@ function abrirModalEditar(claveProducto) {
                 </tr>`;
     }
 
-    $('#tabla-subProductos-editar tbody').html(filas);
+    //$('#tabla-subProductos-editar tbody').html(filas);
+    tabla.rows.add($(filas)).columns.adjust().draw();
+
     $('#btnGuardarCambios').attr('onclick', `guardarCambiosFormula()`);
-    //$('#tabla-subProductos-editar').editableTableWidget();
   });
+
+  mostrarSustitutos(claveProducto);
 }
+
+$('#modalEditarFormula').on('shown.bs.modal', function() {
+  $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+});
+
+$('a[data-toggle="tab"]').on('shown.bs.tab', function () {
+  $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
+})
 
 function habilitarEditado(idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante) {
   $(`#${idCampoNombre}`).attr('readonly', false);
   $(`#${idCampoTipoFormulacion}`).attr('readonly', false);
   $(`#${idCampoValorConstante}`).attr('readonly', false);
   //console.log($(`#${idCampoNombre}`).val());
+}
+
+function guardarEditadoSustituto(idSubProducto, idSustituto, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante){
+  let campoNombre = $(`#${idCampoNombre}`).val()
+  let campoTipoFormulacion = $(`#${idCampoTipoFormulacion}`).val()
+  let campoValorConstante = $(`#${idCampoValorConstante}`).val()
+  $('#modalConfirmarGuardarSustituto').modal('show');
+  $('#btnGuardarSustituto').attr('onclick', `guardarSustitutoEditado('${idSubProducto}', '${idSustituto}', '${campoNombre}', '${campoTipoFormulacion}', '${campoValorConstante}', '${idCampoNombre}', '${idCampoTipoFormulacion}', '${idCampoValorConstante}')`);
+  //console.log(idSubProducto);
 }
 
 function guardarEditado(idSubProducto, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante){
@@ -520,6 +593,25 @@ function guardarEditado(idSubProducto, idCampoNombre, idCampoTipoFormulacion, id
 function abrirModalEliminar(claveProducto) {
   $('#modalConfirmarEliminar').modal('show');
   $('#btnEliminar').attr('onclick', `eliminarFormula('${claveProducto}')`);
+}
+
+function guardarSustitutoEditado(idSubProducto, idSustituto, campoNombre, campoTipoFormulacion, campoValorConstante, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante) {
+  let producto = $('#productoEditar').val();
+  let rutaFormula = db.ref(`formulaciones/${producto}/subProductos/${idSubProducto}/sustitutos/${idSustituto}`);
+  //console.log(rutaFormula);
+  let datos = {
+    nombre: campoNombre,
+    tipoFormulacion: campoTipoFormulacion,
+    valorConstante: campoValorConstante
+  }
+  rutaFormula.update(datos);
+
+  $(`#${idCampoNombre}`).attr('readonly', true);
+  $(`#${idCampoTipoFormulacion}`).attr('readonly', true);
+  $(`#${idCampoValorConstante}`).attr('readonly', true);
+
+  $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'La fórmula se guardó correctamente'});
+  $('#modalConfirmarGuardarSustituto').modal('hide');
 }
 
 function guardarSubProductoEditado(idSubProducto, campoNombre, campoTipoFormulacion, campoValorConstante, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante) {

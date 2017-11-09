@@ -421,21 +421,42 @@
                 </div>
               </div>
             </div>
-            <label for="">Componentes:</label>
-            <div class="table-responsive" style="max-height: 200px; overflow: true;">
-              <table id="tabla-subProductos-editar" class="table table-striped table-condensed table-hover table-bordered">
-                <thead>
-                  <th >Clave</th>
-                  <th >Nombre de subproducto</th>
-                  <th >Tipo de formulación</th>
-                  <th >Valor constante</th>
-                  <th></th>
-                  <th></th>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#tabSubProductos" aria-controls="tabSubProductos" role="tab" data-toggle="tab">SubProductos</a></li>
+              <li role="presentation"><a href="#tabSustitutos" aria-controls="tabSustitutos" role="tab" data-toggle="tab">Sustitutos</a></li>
+            </ul>
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="tabSubProductos">
+                <table id="tabla-subProductos-editar" class="table table-striped table-condensed table-hover table-bordered">
+                  <thead>
+                    <th >Clave</th>
+                    <th >Nombre de subproducto</th>
+                    <th >Tipo de formulación</th>
+                    <th >Valor constante</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="tabSustitutos">
+                <table id="tabla-sustitutos-editar" class="table table-striped table-condensed table-hover table-bordered">
+                  <thead>
+                    <th >Clave</th>
+                    <th >Nombre de sustituto</th>
+                    <th >Tipo de formulación</th>
+                    <th >Valor constante</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
+            <!-- <label for="">Componentes:</label> -->
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -457,6 +478,23 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
             <button id="btnGuardar" type="button" class="btn btn-primary">Sí</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="modalConfirmarGuardarSustituto" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">¿Desea guardar?</h4>
+          </div>
+          <div class="modal-body">
+            <p>¿Está seguro que desea guardar este sustituto?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button id="btnGuardarSustituto" type="button" class="btn btn-primary">Sí</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
