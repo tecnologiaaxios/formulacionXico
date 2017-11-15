@@ -537,6 +537,7 @@ function abrirModalEditar(claveProducto) {
     $('#productoEditar').val(claveProducto);
     $('#nombreEditar').val(formula.nombre);
     $('#categoriaEditar').val(formula.categoria);
+    $('#btnGuardarCambios').attr('onclick', `guardarCambiosFormula('${claveProducto}')`);
 
     let subProductos = formula.subProductos;
     let filas = "";
@@ -555,8 +556,6 @@ function abrirModalEditar(claveProducto) {
 
     //$('#tabla-subProductos-editar tbody').html(filas);
     tabla.rows.add($(filas)).columns.adjust().draw();
-
-    $('#btnGuardarCambios').attr('onclick', `guardarCambiosFormula()`);
   });
 
   mostrarSustitutos(claveProducto);
@@ -622,7 +621,7 @@ function guardarSustitutoEditado(idSubProducto, idSustituto, campoNombre, campoT
 function guardarSubProductoEditado(idSubProducto, campoNombre, campoTipoFormulacion, campoValorConstante, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante) {
   let producto = $('#productoEditar').val();
   let rutaFormula = db.ref(`formulaciones/${producto}/subProductos/${idSubProducto}`);
-  //console.log(rutaFormula);
+  
   let datos = {
     nombre: campoNombre,
     tipoFormulacion: campoTipoFormulacion,
@@ -646,8 +645,10 @@ function guardarCambiosFormula() {
   let refEditarProducto = db.ref(`formulaciones/${claveProducto}`)
   refEditarProducto.update({
     nombre: nombreProducto,
-    categoria: categoriaEditar
+    categoria: categoriaProducto
   });
+
+  $('#modalEditarFormula').modal('show');
 }
 
 /*function abrirModalEditarSubProducto(claveProducto, idSubProducto) {
