@@ -143,7 +143,7 @@ function agregarSubProducto() {
 
     let datos = {
       nombre: nombre,
-      valorConstante: valorConstante,
+      valorConstante: Number(valorConstante),
       tipoFormulacion: tipoFormulacion
     }
 
@@ -271,7 +271,7 @@ function agregarSustituto() {
 
     let datos = {
       nombre: nombreSustituto,
-      valorConstante: valorConstanteSustituto,
+      valorConstante: Number(valorConstanteSustituto),
       tipoFormulacion: tipoFormulacionSustituto
     }
 
@@ -369,41 +369,82 @@ function guardarFormula() {
       }
       formulacionesRef.set(datos);
 
-      for(let i in listaSubProductos) {
-        let ruta = db.ref(`formulaciones/${producto}/subProductos/${clavesSubProductos[i]}`);
-        ruta.set(listaSubProductos[i]);
-      }
+      let connectedRef = firebase.database().ref(".info/connected");
 
-      listaSubProductos = [];
-      clavesSubProductos = [];
+      connectedRef.on("value", function(snap) {
+        if (snap.val() === true) {
+          for(let i in listaSubProductos) {
+            let ruta = db.ref(`formulaciones/${producto}/subProductos/${clavesSubProductos[i]}`);
+            ruta.set(listaSubProductos[i]);
+          }
 
-      let seUsaronSustitutos = $('#cbAgregarSustitutos').bootstrapSwitch('state');
-      if(seUsaronSustitutos) {
-        for(let i in listaSustitutos) {
-          let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${clavesSustitutos[i]}`);
-          rutaSustitutos.set(listaSustitutos[i]);
+          listaSubProductos = [];
+          clavesSubProductos = [];
+
+          let seUsaronSustitutos = $('#cbAgregarSustitutos').bootstrapSwitch('state');
+          if(seUsaronSustitutos) {
+            for(let i in listaSustitutos) {
+              let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${clavesSustitutos[i]}`);
+              rutaSustitutos.set(listaSustitutos[i]);
+            }
+
+            listaSustitutos = [];
+            listaClavesSubProductos = [];
+            clavesSustitutos = [];
+          }
+          $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'La fórmula se guardó correctamente'});
+          $('#producto').val('');
+          $('#nombre').val('');
+          $('#categoria').val('');
+          $('#producto').attr('readonly', true);
+          $('#nombre').attr('readonly', true);
+          $('#categoria').attr('readonly', true);
+          $('#subProductos').attr('readonly', true);
+          $('#cantidad').attr('readonly', true);
+          $('#tipoFormulacion').attr('readonly', true);
+          $('#añadirSubProducto').attr('disabled', true);
+          $('#claveSubProductoSustituir').val('');
+          $('#tabla-subProductos tbody').html('');
+          $('#tabla-sustitutos tbody').html('');
+          $('#cbAgregarSustitutos').bootstrapSwitch('state', false);
         }
+        else {
+          for(let i in listaSubProductos) {
+            let ruta = db.ref(`formulaciones/${producto}/subProductos/${clavesSubProductos[i]}`);
+            ruta.onDisconnect().set(listaSubProductos[i]);
+          }
 
-        listaSustitutos = [];
-        listaClavesSubProductos = [];
-        clavesSustitutos = [];
-      }
+          listaSubProductos = [];
+          clavesSubProductos = [];
 
-      $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'La fórmula se guardó correctamente'});
-      $('#producto').val('');
-      $('#nombre').val('');
-      $('#categoria').val('');
-      $('#producto').attr('readonly', true);
-      $('#nombre').attr('readonly', true);
-      $('#categoria').attr('readonly', true);
-      $('#subProductos').attr('readonly', true);
-      $('#cantidad').attr('readonly', true);
-      $('#tipoFormulacion').attr('readonly', true);
-      $('#añadirSubProducto').attr('disabled', true);
-      $('#claveSubProductoSustituir').val('');
-      $('#tabla-subProductos tbody').html('');
-      $('#tabla-sustitutos tbody').html('');
-      $('#cbAgregarSustitutos').bootstrapSwitch('state', false);
+          let seUsaronSustitutos = $('#cbAgregarSustitutos').bootstrapSwitch('state');
+          if(seUsaronSustitutos) {
+            for(let i in listaSustitutos) {
+              let rutaSustitutos = db.ref(`formulaciones/${producto}/subProductos/${listaClavesSubProductos[i]}/sustitutos/${clavesSustitutos[i]}`);
+              rutaSustitutos.onDisconnect().set(listaSustitutos[i]);
+            }
+
+            listaSustitutos = [];
+            listaClavesSubProductos = [];
+            clavesSustitutos = [];
+          }
+          $.toaster({ priority : 'success', title : 'Mensaje de información', message : 'La fórmula se guardó correctamente'});
+          $('#producto').val('');
+          $('#nombre').val('');
+          $('#categoria').val('');
+          $('#producto').attr('readonly', true);
+          $('#nombre').attr('readonly', true);
+          $('#categoria').attr('readonly', true);
+          $('#subProductos').attr('readonly', true);
+          $('#cantidad').attr('readonly', true);
+          $('#tipoFormulacion').attr('readonly', true);
+          $('#añadirSubProducto').attr('disabled', true);
+          $('#claveSubProductoSustituir').val('');
+          $('#tabla-subProductos tbody').html('');
+          $('#tabla-sustitutos tbody').html('');
+          $('#cbAgregarSustitutos').bootstrapSwitch('state', false);
+        }
+      });
     }
   });
 }
@@ -621,7 +662,7 @@ function guardarSustitutoEditado(idSubProducto, idSustituto, campoNombre, campoT
 function guardarSubProductoEditado(idSubProducto, campoNombre, campoTipoFormulacion, campoValorConstante, idCampoNombre, idCampoTipoFormulacion, idCampoValorConstante) {
   let producto = $('#productoEditar').val();
   let rutaFormula = db.ref(`formulaciones/${producto}/subProductos/${idSubProducto}`);
-  
+
   let datos = {
     nombre: campoNombre,
     tipoFormulacion: campoTipoFormulacion,
@@ -642,13 +683,29 @@ function guardarCambiosFormula() {
   let nombreProducto = $('#nombreEditar').val();
   let categoriaProducto = $('#categoriaEditar').val();
 
-  let refEditarProducto = db.ref(`formulaciones/${claveProducto}`)
-  refEditarProducto.update({
-    nombre: nombreProducto,
-    categoria: categoriaProducto
-  });
+  let connectedRef = firebase.database().ref(".info/connected");
+  connectedRef.on("value", function(snap) {
+    if (snap.val() === true) {
+      console.log("Hay conexion")
+      let refEditarProducto = db.ref(`formulaciones/${claveProducto}`)
+      refEditarProducto.update({
+        nombre: nombreProducto,
+        categoria: categoriaProducto
+      });
 
-  $('#modalEditarFormula').modal('show');
+      $('#modalEditarFormula').modal('show');
+    }
+    else {
+      console.log("No hay conexion");
+      let refEditarProducto = db.ref(`formulaciones/${claveProducto}`)
+      refEditarProducto.onDisconnect().update({
+        nombre: nombreProducto,
+        categoria: categoriaProducto
+      });
+
+      $('#modalEditarFormula').modal('show');
+    }
+  });
 }
 
 /*function abrirModalEditarSubProducto(claveProducto, idSubProducto) {
