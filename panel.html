@@ -7,28 +7,18 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href='logo.ico' rel='shortcut icon' type='image/x-icon'/>
-
     <title>Sistema de formulación</title>
 
-    <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <!-- DataTables CSS -->
     <link href="vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-
-    <!-- DataTables Responsive CSS -->
     <link href="vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
-    <!-- MetisMenu CSS -->
     <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="dist/css/sb-admin-2.css" rel="stylesheet">
-    <!-- Morris Charts CSS -->
     <link href="vendor/morrisjs/morris.css" rel="stylesheet">
-    <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="dist/css/bootstrap-select.css">
-
     <link rel="stylesheet" href="css/dragula.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css">
@@ -44,7 +34,6 @@
   </head>
   <body>
     <div id="wrapper">
-      <!-- Navigation -->
       <nav class="navbar navbar-default navbar-static-top fixed" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -55,7 +44,6 @@
           </button>
           <img class="navbar-brand" id="logo" src="logo.png"></img>
         </div>
-        <!-- /.navbar-header -->
         <ul class="nav navbar-top-links navbar-right no-padding ">
           <!--<li id="campana" onclick="mostrarNotificaciones()" class="dropdown no-padding">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -80,11 +68,8 @@
                 <a onclick="logout()"><span class="glyphicon glyphicon-off"></span> Cerrar sesión</a>
               </li>
             </ul>
-            <!-- /.dropdown-alerts -->
           </li>
-          <!-- /.dropdown -->
         </ul>
-        <!-- /.navbar-top-links -->
       </nav>
       <div class="barside">
         <img class="navbar-brand" id="logo" src="logo.png"></img>
@@ -97,7 +82,7 @@
           <div class="col-md-12">
             <h1 class="page-header">Fórmulas</h1>
           </div>
-        </div><!-- /.row -->
+        </div>
         <div class="row">
           <div class="col-md-2 col-md-offset-10">
             <button type="button" class="btn btn-success btn-lg" onclick="abrirModalAgregrar()">Nueva fórmula <i class="fa fa-flask" aria-hidden="true"></i></button>
@@ -209,8 +194,8 @@
             </div>
           </div>
         </div>
-      </div><!-- /#page-wrapper -->
-    </div><!-- /#wrapper -->
+      </div>
+    </div>
     <div id="modalAgregarFormula" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -393,9 +378,9 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-success" onclick="guardarFormula()">Guardar</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
     <div id="modalEditarFormula" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -459,15 +444,14 @@
               </div>
             </div>
             <!-- <label for="">Componentes:</label> -->
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             <button id="btnGuardarCambios"type="button" class="btn btn-warning">Guardar cambios</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
     <div id="modalConfirmarGuardar" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -482,9 +466,9 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
             <button id="btnGuardar" type="button" class="btn btn-primary">Sí</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
     <div id="modalConfirmarGuardarSustituto" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -499,9 +483,9 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
             <button id="btnGuardarSustituto" type="button" class="btn btn-primary">Sí</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
     <div id="modalConfirmarEliminar" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -516,9 +500,9 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
             <button id="btnEliminar" type="button" class="btn btn-primary">Sí</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
     <div id="modalEditarSubProducto" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -552,51 +536,11 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-primary">Guardar cambios</button>
           </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!-- jQuery -->
-    <script>window.$ = window.jQuery = require('./js/jquery-3.2.1.min.js')</script>
-    <!-- <script src="js/jquery-3.2.1.min.js"></script> -->
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="dist/js/bootstrap-select.js"></script>
-    <script src="vendor/metisMenu/metisMenu.min.js"></script>
-    <!-- Morris Charts JavaScript -->
-    <!-- <script src="vendor/raphael/raphael.min.js"></script>
-    <script src="vendor/morrisjs/morris.min.js"></script>
-    <script src="data/morris-data.js"></script> -->
-    <!-- Custom Theme JavaScript -->
-    <script src="dist/js/sb-admin-2.js"></script>
-    <!-- DataTables JavaScript -->
-    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
-
-    <script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap-datepicker.es.min.js"></script>
-    <script src="js/bootstrap-tooltip.js"></script>
-    <script src="js/jquery.toaster.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
-    <script src="js/mindmup-editabletable.js"></script>
-    <script src="js/bootstrap-switch.min.js"></script>
-    <!--<script src="js/jspdf.debug.js"></script>-->
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyA19j6-VLNcXLJfBkfd_lZfFFbzg6z0Imc",
-        authDomain: "xico-netcontrol.firebaseapp.com",
-        databaseURL: "https://xico-netcontrol.firebaseio.com",
-        projectId: "xico-netcontrol",
-        storageBucket: "xico-netcontrol.appspot.com",
-        messagingSenderId: "248615705793"
-      };
-      firebase.initializeApp(config);
-    </script>
-    <!--<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/$VERSION/dragula.min.js'></script>-->
-    <script src="js/moment-with-locales.js"></script>
-    <script src="js/panel.js"></script>
+        </div>
+      </div>
+    </div>
+    <!-- <script>window.$ = window.jQuery = require('./js/jquery-3.2.1.min.js')</script> -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/panel.min.js"></script>
   </body>
 </html>
