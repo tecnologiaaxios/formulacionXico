@@ -89,6 +89,20 @@
           </div>
         </div><br>
         <div class="row">
+          <!-- <div class="col-md-12">
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active act-jamon"><a style="background-color: #666 !important; color: #fff;" href="#home" aria-controls="home" role="tab" data-toggle="tab">Jamones</a></li>
+              <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Salchichas</a></li>
+              <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Chorizos</a></li>
+              <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Delicatessen</a></li>
+            </ul>
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="home">...</div>
+              <div role="tabpanel" class="tab-pane" id="profile">...</div>
+              <div role="tabpanel" class="tab-pane" id="messages">...</div>
+              <div role="tabpanel" class="tab-pane" id="settings">...</div>
+            </div>
+          </div> -->
           <div class="col-md-6">
             <div class="panel panel-primary">
               <div class="panel-heading">
@@ -233,10 +247,10 @@
                       <select class="form-control input-sm" name="subProductos" id="subProductos">
 
                       </select>
-                       <span id="helpBlockSubProductos" class="hidden help-block">Campo obligatorio</span>
+                      <span id="helpBlockSubProductos" class="hidden help-block">Campo obligatorio</span>
                     </div>
                   </div>
-                  <div class="col-md-6 hide">
+                  <div class="col-md-6 hidden">
                     <div class="form-group">
                       <label for="nombreSubProducto">Nombre:</label>
                       <input id="nombreSubProducto" name="nombreSubProducto" class="form-control input-sm" placeholder="Nombre">
@@ -409,38 +423,161 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button id="btnAgregarSubProducto" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Agregar un subProducto"><i class="fa fa-plus-square" aria-hidden="true"></i></button>
+                  <button id="btnAgregarSustituto" type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Agregar un sustituto"><i class="fa fa-plus-square-o" aria-hidden="true"></i></button>
+                </div>
+              </div>
+            </div><br>
+            <div class="collapse" id="collapseAgregarSubProducto">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="subProductosEditar">Sub producto:</label>
+                        <select id="subProductosEditar" class="form-control">
+
+                        </select>
+                        <span id="helpBlockSubProductosEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6 hidden">
+                      <div class="form-group">
+                        <label for="nombreSubProductoEditar">Nombre:</label>
+                        <input id="nombreSubProductoEditar" name="nombreSubProductoEditar" class="form-control input-sm" placeholder="Nombre">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="cantidadEditar">Cantidad:</label>
+                        <input id="cantidadEditar" class="form-control" type="number">
+                        <span id="helpBlockCantidadEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="tipoFormulacionEditar">Tipo de formulación:</label>
+                        <select id="tipoFormulacionEditar" class="form-control">
+
+                        </select>
+                        <span id="helpBlockTipoFormulacionEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2 col-md-offset-10">
+                      <button id="añadirSubProductoEditar" class="btn btn-primary btn-sm btn-block" onclick="agregarSubProductoEditar()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Añadir</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="collapse" id="collapseAgregarSustituto">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="claveSubProductoSustituirEditar">SubProducto a sustituir:</label>
+                        <select class="form-control input-sm" name="claveSubProductoSustituirEditar" id="claveSubProductoSustituirEditar">
+                          <option selected disabled value="">Seleccionar</option>
+                        </select>
+                        <span id="helpBlockClaveSubProductoSustituirEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="sustitutosEditar">Sustituto:</label>
+                        <select class="form-control input-sm" name="sustitutosEditar" id="sustitutosEditar">
+
+                        </select>
+                        <span id="helpBlockSustitutosEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6 hidden">
+                      <div class="form-group">
+                        <label for="nombreSustitutoEditar">Nombre:</label>
+                        <input id="nombreSustitutoEditar" name="nombreSustitutoEditar" class="form-control input-sm" placeholder="Nombre">
+                      </div>
+                    </div>
+                    <div class="col-md-6 hidden">
+                      <div class="form-group">
+                        <label for="nombreSustituto">Nombre:</label>
+                        <input id="nombreSustitutoEditar" name="nombreSustitutoEditar" class="form-control input-sm" placeholder="Nombre">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="cantidadSustitutoEditar">Cantidad:</label>
+                        <input type="number" min="0" name="cantidadSustitutoEditar" id="cantidadSustitutoEditar" class="form-control input-sm" placeholder="Cantidad">
+                        <span id="helpBlockCantidadSustitutoEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <label for="tipoFormulacionSustitutoEditar">Tipo de formulación:</label>
+                        <select type="" name="tipoFormulacionSustitutoEditar" id="tipoFormulacionSustitutoEditar" class="form-control input-sm"></select>
+                        <span id="helpBlockTipoFormulacionSustitutoEditar" class="hidden help-block">Campo obligatorio</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2 col-md-offset-10">
+                      <button class="btn btn-primary btn-sm btn-block" onclick="agregarSustitutoEditar()"><i class="fa fa-plus-circle" aria-hidden="true"></i> Añadir</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#tabSubProductos" aria-controls="tabSubProductos" role="tab" data-toggle="tab">SubProductos</a></li>
               <li role="presentation"><a href="#tabSustitutos" aria-controls="tabSustitutos" role="tab" data-toggle="tab">Sustitutos</a></li>
             </ul>
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="tabSubProductos">
-                <table id="tabla-subProductos-editar" class="table table-striped table-condensed table-hover table-bordered">
-                  <thead>
-                    <th >Clave</th>
-                    <th >Nombre de subproducto</th>
-                    <th >Tipo de formulación</th>
-                    <th >Valor constante</th>
-                    <th>Editar</th>
-                    <th>Guardar</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <table id="tabla-subProductos-editar" class="table table-striped table-condensed table-hover table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Clave</th>
+                          <th>Nombre</th>
+                          <th>Tipo de formulación</th>
+                          <th>Valor constante</th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="tabSustitutos">
-                <table id="tabla-sustitutos-editar" class="table table-striped table-condensed table-hover table-bordered">
-                  <thead>
-                    <th >Clave</th>
-                    <th >Nombre de sustituto</th>
-                    <th >Tipo de formulación</th>
-                    <th >Valor constante</th>
-                    <th>Editar</th>
-                    <th>Guardar</th>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <table id="tabla-sustitutos-editar" class="table table-striped table-condensed table-hover table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Clave</th>
+                          <th>Nombre</th>
+                          <th>Tipo de formulación</th>
+                          <th>Valor constante</th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- <label for="">Componentes:</label> -->
@@ -539,8 +676,24 @@
         </div>
       </div>
     </div>
-    <!-- <script>window.$ = window.jQuery = require('./js/jquery-3.2.1.min.js')</script> -->
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/panel.min.js"></script>
+    <script>window.$ = window.jQuery = require('./js/jquery-3.2.1.min.js')</script>
+    <!-- <script src="js/jquery-3.2.1.min.js"></script> -->
+    <!-- <script src="js/panel.min.js"></script> -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="dist/js/bootstrap-select.js"></script>
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="dist/js/sb-admin-2.js"></script>
+    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+    <script src="js/bootstrap-datepicker.es.min.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/jquery.toaster.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/mindmup-editabletable.js"></script>
+    <script src="js/bootstrap-switch.min.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/panel.js"></script>
   </body>
 </html>

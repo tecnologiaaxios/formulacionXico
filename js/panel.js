@@ -79,10 +79,10 @@ $('#modalAgregarFormula').on('hide.bs.modal', function (e) {
   $('#helpBlockTipoFormulacion').addClass('hidden');
 });
 
-$('#tabla-subProductos-editar td').on('change', function(evt, newValue) {
+/*$('#tabla-subProductos-editar td').on('change', function(evt, newValue) {
 	let formulasRef = db.ref('formulaciones');
 
-});
+});*/
 
 function llenarSelectSubProductos() {
   let subProd = db.ref('subProductos');
@@ -94,6 +94,8 @@ function llenarSelectSubProductos() {
     }
     $('#subProductos').html(options);
     $('#sustitutos').html(options)
+    $('#subProductosEditar').html(options);
+    $('#sustitutosEditar').html(options);
   });
 }
 
@@ -119,18 +121,8 @@ function llenarSelectTiposFormulaciones() {
       }
       $('#tipoFormulacion').html(options);
       $('#tipoFormulacionSustituto').html(options);
-  });
-}
-
-function llenarSelectTiposFormulacionesModalEditar() {
-  let tF = db.ref('tiposFormulaciones');
-  tF.on('value', function(snap) {
-    let tipos = snap.val();
-      let options = "";
-      for(let tipo in tipos) {
-        options += `<option value="${tipos[tipo].nombre}">${tipos[tipo].nombre}</option>`;
-      }
-      $('#tipoFormulacionSPEditar').html(options);
+      $('#tipoFormulacionEditar').html(options);
+      $('#tipoFormulacionSustitutoEditar').html(options);
   });
 }
 
@@ -159,7 +151,7 @@ function agregarSubProducto() {
 
     listaSubProductos.push(datos);
     clavesSubProductos.push(id);
-    $('#claveSubProductoSustituir').append(`<option value="${id}">${id} - ${nombre}</option>`)
+    $('#claveSubProductoSustituir').append(`<option value="${id}">${id} - ${nombre}</option>`);
 
     $('#cantidad').val('');
     $('#subProductos').val('');
@@ -362,7 +354,7 @@ function guardarSubProducto() {
 }
 
 function guardarFormula() {
-  let producto = $('#producto').val();
+  let producto = $('#producto').val().trim();
   let nombre = $('#nombre').val();
   let categoria = $('#categoria').val();
 
@@ -373,9 +365,16 @@ function guardarFormula() {
       $.toaster({ priority : 'danger', title : 'Mensaje de información', message : 'Este producto ya tiene una fórmula'});
     }
     else {
+      let kilosProduccion = 0;
+
+      for(let i in listaSubProductos) {
+        kilosProduccion += listaSubProductos[i].valorConstante;
+      }
+
       let datos = {
         nombre: nombre,
-        categoria: categoria
+        categoria: categoria,
+        kilosProduccion: kilosProduccion
       }
       formulacionesRef.set(datos);
 
@@ -555,8 +554,9 @@ function mostrarSustitutos(claveProducto) {
                       <td><input id="nombre-${sustituto}" readonly class="form-control input-sm" value="${sustitutos[sustituto].nombre}"></td>
                       <td><input id="tipoFormulacion-${sustituto}" readonly class="form-control input-sm" value="${sustitutos[sustituto].tipoFormulacion}"></td>
                       <td><input id="valorConstante-${sustituto}" readonly class="form-control input-sm" value="${sustitutos[sustituto].valorConstante}"></td>
-                      <td class=text-center><button class="btn btn-warning btn-sm" onclick="habilitarEditado('nombre-${sustituto}', 'tipoFormulacion-${sustituto}', 'valorConstante-${sustituto}')"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
-                      <td class=text-center><button class="btn btn-success btn-sm" onclick="guardarEditadoSustituto('${subProducto}', '${sustituto}', 'nombre-${sustituto}', 'tipoFormulacion-${sustituto}', 'valorConstante-${sustituto}')"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
+                      <td class=text-center><button type="button" class="btn btn-warning btn-sm" onclick="habilitarEditado('nombre-${sustituto}', 'tipoFormulacion-${sustituto}', 'valorConstante-${sustituto}')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                      <td class=text-center><button type="button" class="btn btn-success btn-sm" onclick="guardarEditadoSustituto('${subProducto}', '${sustituto}', 'nombre-${sustituto}', 'tipoFormulacion-${sustituto}', 'valorConstante-${sustituto}')" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
+                      <td class="text-center"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarSustituto('${subProducto}', '${sustituto}')" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                     </tr>`;
         }
       }
@@ -564,10 +564,15 @@ function mostrarSustitutos(claveProducto) {
 
     //$('#tabla-subProductos-editar tbody').html(filas);
     tabla.rows.add($(filas)).columns.adjust().draw();
+    $('[data-toggle="tooltip"]').tooltip();
   });
 }
 
 function abrirModalEditar(claveProducto) {
+  llenarSelectSubProductos();
+  llenarSelectCategorias();
+  llenarSelectTiposFormulaciones();
+
   let tabla = $(`#tabla-subProductos-editar`).DataTable({
     destroy: true,
     "lengthChange": false,
@@ -600,17 +605,34 @@ function abrirModalEditar(claveProducto) {
                   <td><input id="nombre-${subProducto}" readonly class="form-control input-sm" value="${subProductos[subProducto].nombre}"></td>
                   <td><input id="tipoFormulacion-${subProducto}" readonly class="form-control input-sm" value="${subProductos[subProducto].tipoFormulacion}"></td>
                   <td><input id="valorConstante-${subProducto}" readonly class="form-control input-sm" value="${subProductos[subProducto].valorConstante}"></td>
-                  <td class=text-center><button class="btn btn-warning btn-sm" onclick="habilitarEditado('nombre-${subProducto}', 'tipoFormulacion-${subProducto}', 'valorConstante-${subProducto}')"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
-                  <td class=text-center><button class="btn btn-success btn-sm" onclick="guardarEditado('${subProducto}', 'nombre-${subProducto}', 'tipoFormulacion-${subProducto}', 'valorConstante-${subProducto}')"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
+                  <td class="text-center"><button type="button" class="btn btn-warning btn-sm" onclick="habilitarEditado('nombre-${subProducto}', 'tipoFormulacion-${subProducto}', 'valorConstante-${subProducto}')" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fa fa-pencil" aria-hidden="true"></i></button></td>
+                  <td class="text-center"><button type="button" class="btn btn-success btn-sm" onclick="guardarEditado('${subProducto}', 'nombre-${subProducto}', 'tipoFormulacion-${subProducto}', 'valorConstante-${subProducto}')" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></td>
+                  <td class="text-center"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarSubProducto('${subProducto}')" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fa fa-times" aria-hidden="true"></i></button></td>
                 </tr>`;
+
+      $('#claveSubProductoSustituirEditar').append(`<option value="${subProducto}">${subProducto} - ${subProductos[subProducto].nombre}</option>`);
     }
 
     //$('#tabla-subProductos-editar tbody').html(filas);
     tabla.rows.add($(filas)).columns.adjust().draw();
+    $('[data-toggle="tooltip"]').tooltip();
   });
 
   mostrarSustitutos(claveProducto);
 }
+
+function eliminarSubProducto(claveSubProducto) {
+  let producto = $('#productoEditar').val();
+  let formulaRef = db.ref(`formulaciones/${producto}/subProductos`);
+  formulaRef.child(claveSubProducto).remove();
+}
+
+function eliminarSustituto(claveSubProducto, claveSustituto) {
+  let producto = $('#productoEditar').val();
+  let formulaRef = db.ref(`formulaciones/${producto}/subProductos/${claveSubProducto}/sustitutos/`);
+  formulaRef.child(claveSustituto).remove();
+}
+
 
 $('#modalEditarFormula').on('shown.bs.modal', function() {
   $.fn.dataTable.tables( {visible: true, api: true} ).columns.adjust();
@@ -697,13 +719,14 @@ function guardarCambiosFormula() {
   connectedRef.on("value", function(snap) {
     if (snap.val() === true) {
       console.log("Hay conexion")
+
       let refEditarProducto = db.ref(`formulaciones/${claveProducto}`)
       refEditarProducto.update({
         nombre: nombreProducto,
         categoria: categoriaProducto
       });
 
-      $('#modalEditarFormula').modal('show');
+      $('#modalEditarFormula').modal('hide');
     }
     else {
       console.log("No hay conexion");
@@ -743,7 +766,6 @@ function haySesion() {
     //si hay un usuario
     if (user) {
       mostrarContador();
-
       mostrarProductos("jamones");
       mostrarProductos("salchichas");
       mostrarProductos("chorizos");
@@ -845,4 +867,272 @@ $(document).ready(function() {
       'timeout': 3000
     }
   });
+});
+
+$('#btnAgregarSubProducto').click(function () {
+  $('#collapseAgregarSubProducto').collapse('toggle');
+});
+
+$('#btnAgregarSustituto').click(function () {
+  $('#collapseAgregarSustituto').collapse('toggle');
+});
+
+$('#collapseAgregarSubProducto').on('show.bs.collapse', function () {
+  $('#collapseAgregarSustituto').collapse('hide');
+})
+
+$('#collapseAgregarSustituto').on('show.bs.collapse', function () {
+  $('#collapseAgregarSubProducto').collapse('hide');
+});
+
+$('#subProductosEditar').change(function () {
+  let id = $(this).val();
+
+  let subProductosRef = db.ref(`subProductos/${id}`);
+  subProductosRef.once('value', function(snap) {
+    let subProducto = snap.val();
+
+    $('#nombreSubProductoEditar').val(subProducto.nombre);
+  });
+
+  if(id == undefined || id == null) {
+    $('#subProductosEditar').parent().addClass('has-error');
+    $('#helpBlockSubProductosEditar').removeClass('hidden');
+  }
+  else {
+    $('#subProductosEditar').parent().removeClass('has-error');
+    $('#helpBlockSubProductosEditar').addClass('hidden');
+  }
+});
+
+$('#cantidadEditar').change(function() {
+  let valorConstante = $(this).val();
+
+  if(valorConstante.length > 0) {
+    $('#cantidadEditar').parent().removeClass('has-error');
+    $('#helpBlockCantidadEditar').addClass('hidden');
+  }
+  else {
+    $('#cantidadEditar').parent().addClass('has-error');
+    $('#helpBlockCantidadEditar').removeClass('hidden');
+  }
+});
+
+$('#tipoFormulacionEditar').change(function() {
+  let tipoFormulacion = $(this).val();
+
+  if(tipoFormulacion == undefined || tipoFormulacion == null) {
+    $('#tipoFormulacionEditar').parent().addClass('has-error');
+    $('#helpBlockTipoFormulacionEditar').removeClass('hidden');
+  }
+  else {
+    $('#tipoFormulacionEditar').parent().removeClass('has-error');
+    $('#helpBlockTipoFormulacionEditar').addClass('hidden');
+  }
+});
+
+function agregarSubProductoEditar() {
+  let claveProducto = $('#productoEditar').val();
+  let id = $('#subProductosEditar').val();
+  let nombre = $('#nombreSubProductoEditar').val();
+  let valorConstante = $('#cantidadEditar').val();
+  let tipoFormulacion = $('#tipoFormulacionEditar').val();
+
+  if(id != null && id != undefined &&  valorConstante.length > 0 && tipoFormulacion != null && tipoFormulacion != undefined) {
+    let datos = {
+      nombre: nombre,
+      valorConstante: Number(valorConstante),
+      tipoFormulacion: tipoFormulacion
+    }
+
+    let rutaSubProductos = db.ref(`formulaciones/${claveProducto}/subProductos/`);
+    rutaSubProductos.once('value', function(snapshot) {
+      let subProductos = snapshot.val();
+      let bandera = false;
+      for(let clave in subProductos) {
+        if(id == clave) {
+          $.toaster({ priority : 'danger', title : 'Mensaje de información', message : 'Esta fórmula ya contiene este subproducto'});
+          $('#subProductosEditar').val('');
+          $('#nombreSubProductoEditar').val('');
+          $('#cantidadEditar').val('');
+          $('#tipoFormulacionEditar').val('');
+          break;
+        }
+      }
+      if(bandera == false) {
+        let subProductoRef = db.ref(`formulaciones/${claveProducto}/subProductos/${id}`)
+        subProductoRef.set(datos);
+
+        $('#subProductosEditar').val('');
+        $('#nombreSubProductoEditar').val('');
+        $('#cantidadEditar').val('');
+        $('#tipoFormulacionEditar').val('');
+      }
+    });  
+  }
+  else {
+    if(id == undefined || id == null) {
+      $('#subProductosEditar').parent().addClass('has-error');
+      $('#helpBlockSubProductosEditar').removeClass('hidden');
+    }
+    else {
+      $('#subProductosEditar').parent().removeClass('has-error');
+      $('#helpBlockSubProductosEditar').addClass('hidden');
+    }
+    if(valorConstante.length > 0) {
+      $('#cantidadEditar').parent().removeClass('has-error');
+      $('#helpBlockCantidadEditar').addClass('hidden');
+    }
+    else {
+      $('#cantidadEditar').parent().addClass('has-error');
+      $('#helpBlockCantidadEditar').removeClass('hidden');
+    }
+    if(tipoFormulacion == undefined || tipoFormulacion == null) {
+      $('#tipoFormulacionEditar').parent().addClass('has-error');
+      $('#helpBlockTipoFormulacionEditar').removeClass('hidden');
+    }
+    else {
+      $('#tipoFormulacionEditar').parent().removeClass('has-error');
+      $('#helpBlockTipoFormulacionEditar').addClass('hidden');
+    }
+  }
+}
+
+function agregarSustitutoEditar() {
+  let claveProducto = $('#productoEditar').val();
+  let claveSubProducto = $('#claveSubProductoSustituirEditar').val();
+  let claveSustituto = $('#sustitutosEditar').val();
+  let nombreSustituto = $('#nombreSustitutoEditar').val();
+  let valorConstanteSustituto = $('#cantidadSustitutoEditar').val();
+  let tipoFormulacionSustituto = $('#tipoFormulacionSustitutoEditar').val();
+
+  console.log(nombreSustituto);
+
+  if(claveSubProducto != null && claveSubProducto != undefined && claveSustituto != null && claveSustituto != undefined &&  valorConstanteSustituto.length > 0 && tipoFormulacionSustituto != null && tipoFormulacionSustituto != undefined) {
+    let datos = {
+      nombre: nombreSustituto,
+      valorConstante: Number(valorConstanteSustituto),
+      tipoFormulacion: tipoFormulacionSustituto
+    }
+
+    let rutaSustitutos = db.ref(`formulaciones/${claveProducto}/subProductos/${claveSubProducto}/sustitutos/`);
+    rutaSustitutos.once('value', function(snapshot) {
+      let sustitutos = snapshot.val();
+      let bandera = false;
+      for(let sustituto in sustitutos) {
+        if(claveSustituto == sustituto) {
+          bandera = true;
+          $.toaster({ priority : 'danger', title : 'Mensaje de información', message : 'Este subProducto ya contiene este sustituto'});
+          $('#claveSubProductoSustituirEditar').val('');
+          $('#sustitutosEditar').val('');
+          $('#nombreSustitutoEditar').val('');
+          $('#tipoFormulacionSustitutoEditar').val('');
+          $('#cantidadSustitutoEditar').val('');
+          break;
+        }
+      }
+      if(bandera == false) {
+        let sustitutoRef = db.ref(`formulaciones/${claveProducto}/subProductos/${claveSubProducto}/sustitutos/${claveSustituto}`);
+        sustitutoRef.set(datos);
+
+        $('#claveSubProductoSustituirEditar').val('');
+        $('#sustitutosEditar').val('');
+        $('#nombreSustitutoEditar').val('');
+        $('#tipoFormulacionSustitutoEditar').val('');
+        $('#cantidadSustitutoEditar').val('');
+      }
+    });
+  }
+  else {
+    if(claveSubProducto == undefined || claveSubProducto == null) {
+      $('#claveSubProductoSustituirEditar').parent().addClass('has-error');
+      $('#helpBlockClaveSubProductoSustituirEditar').removeClass('hidden');
+    }
+    else {
+      $('#claveSubProductoSustituirEditar').parent().removeClass('has-error');
+      $('#helpBlockClaveSubProductoSustituirEditar').addClass('hidden');
+    }
+    if(claveSustituto == undefined || claveSustituto == null) {
+      $('#sustitutosEditar').parent().addClass('has-error');
+      $('#helpBlockSustitutosEditar').removeClass('hidden');
+    }
+    else {
+      $('#sustitutosEditar').parent().removeClass('has-error');
+      $('#helpBlockSustitutosEditar').addClass('hidden');
+    }
+    if(valorConstanteSustituto.length > 0) {
+      $('#cantidadSustitutoEditar').parent().removeClass('has-error');
+      $('#helpBlockCantidadSustitutoEditar').addClass('hidden');
+    }
+    else {
+      $('#cantidadSustitutoEditar').parent().addClass('has-error');
+      $('#helpBlockCantidadSustitutoEditar').removeClass('hidden');
+    }
+    if(tipoFormulacionSustituto == undefined || tipoFormulacion == null) {
+      $('#tipoFormulacionSustitutoEditar').parent().addClass('has-error');
+      $('#helpBlockTipoFormulacionSustitutoEditar').removeClass('hidden');
+    }
+    else {
+      $('#tipoFormulacionSustitutoEditar').parent().removeClass('has-error');
+      $('#helpBlockTipoFormulacionSustitutoEditar').addClass('hidden');
+    }
+  }
+}
+
+$('#claveSubProductoSustituirEditar').change(function () {
+  let id = $(this).val();
+
+  if(id == undefined || id == null) {
+    $('#claveSubProductoSustituirEditar').parent().addClass('has-error');
+    $('#helpBlockClaveSubProductoSustituirEditar').removeClass('hidden');
+  }
+  else {
+    $('#claveSubProductoSustituirEditar').parent().removeClass('has-error');
+    $('#helpBlockClaveSubProductoSustituirEditar').addClass('hidden');
+  }
+});
+
+$('#sustitutosEditar').change(function () {
+  let id = $(this).val();
+
+  let subProductoRef = db.ref(`subProductos/${id}`);
+  subProductoRef.once('value', function(snap) {
+    let subProducto = snap.val();
+    $('#nombreSustitutoEditar').val(subProducto.nombre);
+  });
+
+  if(id == undefined || id == null) {
+    $('#sustitutosEditar').parent().addClass('has-error');
+    $('#helpBlockSustitutosEditar').removeClass('hidden');
+  }
+  else {
+    $('#sustitutosEditar').parent().removeClass('has-error');
+    $('#helpBlockSustitutosEditar').addClass('hidden');
+  }
+});
+
+$('#cantidadSustitutoEditar').change(function() {
+  let valorConstante = $(this).val();
+
+  if(valorConstante.length > 0) {
+    $('#cantidadSustitutoEditar').parent().removeClass('has-error');
+    $('#helpBlockCantidadSustitutoEditar').addClass('hidden');
+  }
+  else {
+    $('#cantidadSustitutoEditar').parent().addClass('has-error');
+    $('#helpBlockCantidadSustitutoEditar').removeClass('hidden');
+  }
+});
+
+$('#tipoFormulacionSustitutoEditar').change(function() {
+  let tipoFormulacion = $(this).val();
+
+  if(tipoFormulacion == undefined || tipoFormulacion == null) {
+    $('#tipoFormulacionSustitutoEditar').parent().addClass('has-error');
+    $('#helpBlockTipoFormulacionSustitutoEditar').removeClass('hidden');
+  }
+  else {
+    $('#tipoFormulacionSustitutoEditar').parent().removeClass('has-error');
+    $('#helpBlockTipoFormulacionSustitutoEditar').addClass('hidden');
+  }
 });

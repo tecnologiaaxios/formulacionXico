@@ -11,8 +11,8 @@ gulp.task('es6', function() {
     'js/panel.js',
     'js/login.js'
   ])
-		.pipe( babel({presets : ['es2015']}))
-		.pipe(gulp.dest(`babel/`));
+    .pipe( babel({presets : ['es2015']}))
+    .pipe(gulp.dest(`babel/`));
 });
 
 gulp.task('paneljs', function() {
@@ -45,14 +45,10 @@ gulp.task('indexjs', function() {
   gulp.src([
     'vendor/bootstrap/js/bootstrap.min.js',
     'dist/js/bootstrap-select.js',
-    'vendor/metisMenu/metisMenu.min.js',
-    'vendor/raphael/raphael.min.js',
-    'vendor/morrisjs/morris.min.js',
-    'data/morris-data.js',
     'dist/js/sb-admin-2.js',
     'js/bootstrap-tooltip.js',
-    'js/firebase.js',
-    'babel/login.js'
+    'js/firebase.js'
+    //'babel/login.js'
   ])
     .pipe(concat('index.min.js'))
     .pipe(uglify().on('error', function(e){
